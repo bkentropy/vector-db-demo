@@ -1,0 +1,26 @@
+
+services:
+  pgvector:
+    container_name: pgvector-container
+    image: pgvector/pgvector:pg17
+    environment:
+    - POSTGRES_USER=langchain
+    - POSTGRES_PASSWORD=langchain
+    - POSTGRES_DB=langchain
+    - PGDATA=/var/lib/postgresql/data/pgdata
+    ports:
+    - 6024:5432
+    volumes:
+    - postgresql:/var/lib/postgresql
+    restart: always
+    shm_size: 128mb
+
+  adminer:
+    image: adminer
+    restart: always
+    ports:
+      - 8088:8080
+
+volumes:
+  postgresql:
+

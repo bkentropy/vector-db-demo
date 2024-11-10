@@ -75,4 +75,45 @@ docs = [
     ),
 ]
 
-vector_store.add_documents(docs, ids=[doc.metadata["id"] for doc in docs])
+# vector_store.add_documents(docs, ids=[doc.metadata["id"] for doc in docs])
+
+results = vector_store.similarity_search(
+    "kitty", k=10, filter={"id": {"$in": [1, 5, 2, 9]}}
+)
+print("An $in query")
+for doc in results:
+    print(f"* {doc.page_content} [{doc.metadata}]")
+
+results_with_location = vector_store.similarity_search(
+    "ducks",
+    k=10,
+    filter={"id": {"$in": [1, 5, 2, 9]}, "location": {"$in": ["pond", "market"]}},
+)
+print("An $in query with a location field, on ducks")
+for doc in results_with_location:
+    print(f"* {doc.page_content} [{doc.metadata}]")
+
+
+results_with_ducks_with_and_op = vector_store.similarity_search(
+    "ducks",
+    k=10,
+    filter={
+        "$and": [
+            {"id": {"$in": [1, 5, 2, 9]}},
+            {"location": {"$in": ["pond", "market"]}},
+        ]
+    },
+)
+print("An $and query with a location field, on ducks")
+for doc in results_with_ducks_with_and_op:
+    print(f"* {doc.page_content} [{doc.metadata}]")
+
+
+results_with_score = vector_store.similarity_search_with_score(query="cats", k=1)
+print("Results with a score")
+for doc, score in results_with_score:
+    print(f"* [SIM={score:3f}] {doc.page_content} [{doc.metadata}]")
+
+print("Use it as a retriever")
+retriever = vector_store.as_retriever(search_type="mmr", search_kwargs={"k": 1})
+print(retriever.invoke("kitty"))
