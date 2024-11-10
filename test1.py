@@ -75,7 +75,7 @@ docs = [
     ),
 ]
 
-# vector_store.add_documents(docs, ids=[doc.metadata["id"] for doc in docs])
+vector_store.add_documents(docs, ids=[doc.metadata["id"] for doc in docs])
 
 results = vector_store.similarity_search(
     "kitty", k=10, filter={"id": {"$in": [1, 5, 2, 9]}}
