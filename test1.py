@@ -11,6 +11,7 @@ load_dotenv()
 EMBEDDING_MODEL_BASE_URL = os.getenv("EMBEDDING_MODEL_BASE_URL")
 EMBEDDING_API_KEY = os.getenv("EMBEDDING_API_KEY")
 EMBEDDING_MODEL = os.getenv("EMBEDDING_MODEL")
+POSTGRES_URL = os.getenv("POSTGRES_URL")
 
 embeddings = OpenAIEmbeddings(
     openai_api_key=EMBEDDING_API_KEY,
@@ -21,7 +22,7 @@ embeddings = OpenAIEmbeddings(
 )
 
 # See docker command above to launch a postgres instance with pgvector enabled.
-connection = "postgresql+psycopg://langchain:langchain@localhost:6024/langchain"  # Uses psycopg3!
+connection = POSTGRES_URL # Uses psycopg3!
 collection_name = "my_docs"
 
 
